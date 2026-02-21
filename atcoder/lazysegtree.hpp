@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-#include "atcoder/internal_bit"
+#include "atcoder/internal_bit.hpp"
 
 namespace atcoder {
 
@@ -195,13 +195,13 @@ struct lazy_segtree {
         return 0;
     }
 
-  private:
+  protected:
     int _n, size, log;
     std::vector<S> d;
     std::vector<F> lz;
 
     void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
-    void all_apply(int k, F f) {
+    virtual void all_apply(int k, F f) {
         d[k] = mapping(f, d[k]);
         if (k < size) lz[k] = composition(f, lz[k]);
     }
