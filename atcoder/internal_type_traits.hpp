@@ -10,21 +10,21 @@ namespace atcoder {
 namespace internal {
 
 #ifndef _MSC_VER
-template <class T>
+__extension__ template <class T>
 using is_signed_int128 =
     typename std::conditional<std::is_same<T, __int128_t>::value ||
                                   std::is_same<T, __int128>::value,
                               std::true_type,
                               std::false_type>::type;
 
-template <class T>
+__extension__ template <class T>
 using is_unsigned_int128 =
     typename std::conditional<std::is_same<T, __uint128_t>::value ||
                                   std::is_same<T, unsigned __int128>::value,
                               std::true_type,
                               std::false_type>::type;
 
-template <class T>
+__extension__ template <class T>
 using make_unsigned_int128 =
     typename std::conditional<std::is_same<T, __int128_t>::value,
                               __uint128_t,

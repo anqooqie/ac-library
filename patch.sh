@@ -1,3 +1,10 @@
+#!/bin/bash -eu
+
+BASE_VERSION="$(git describe --tags HEAD)"
+BASE_COMMIT="$(git rev-parse HEAD)"
+
+{
+  cat <<'_EOT_'
 # AC(AtCoder) Library Patched for My Library
 
 This is [AtCoder Library](https://github.com/atcoder/ac-library) patched for [anqooqie](https://github.com/anqooqie)'s library.
@@ -6,7 +13,9 @@ Instead, contribute to the official one.
 
 ## Base version
 
-It is based on [v1.6](https://github.com/atcoder/ac-library/tree/864245a00b00dd008d1abfdc239618fdb7d139da) of the official repository.
+_EOT_
+  printf 'It is based on [%s](https://github.com/atcoder/ac-library/tree/%s) of the official repository.\n' "${BASE_VERSION}" "${BASE_COMMIT}"
+  cat <<'_EOT_'
 The patch is applied by `patch.sh`, and this branch is rebuilt on the latest official commit and force-pushed every time the base is updated.
 
 ## Differences from the official repository
@@ -18,3 +27,15 @@ The patch is applied by `patch.sh`, and this branch is rebuilt on the latest off
 - This `README.md` replaces the official one.
 
 Nothing else is changed.
+_EOT_
+} >README.md
+
+sed -r 's/private:/protected:/g' -i atcoder/lazysegtree.hpp
+sed -r 's/void all_apply/virtual void all_apply/g' -i atcoder/lazysegtree.hpp
+
+sed -zr 's/(int z = \(int\)internal::bit_ceil[^\n]*\n\s*)assert/[[maybe_unused]] \1assert/g' -i atcoder/convolution.hpp
+
+sed -r 's/\(unsigned __int128\)\(z\)/__extension__ &/g' -i atcoder/internal_math.hpp
+sed -zr 's/template <class T>\n(using (is_signed_int128|is_unsigned_int128|make_unsigned_int128) =)/__extension__ template <class T>\n\1/g' -i atcoder/internal_type_traits.hpp
+
+rm -rf expander.py test tools
